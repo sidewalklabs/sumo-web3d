@@ -1,0 +1,56 @@
+{
+  "rules": {
+    "no-var-keyword": true,
+    "triple-equals": true,
+    "class-name": true,
+    // Disabled for now; see https://github.com/palantir/tslint/issues/2470
+    // "no-unused-variable": [true, "react", {"ignore-pattern": "^_"}],
+    // "no-require-imports": true,
+    "ordered-imports": [true, {"named-imports-order": "lowercase-first"}],
+    "no-shadowed-variable": true,
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ],
+    "comment-format": [true, "check-space"],
+    "jsdoc-format": true,
+    "label-position": true,
+    "no-arg": true,
+    "no-angle-bracket-type-assertion": true,
+    "no-construct": true,
+    // Has some issues with chai expressions like expect(foo).to.be.true.
+    // See https://github.com/palantir/tslint/issues/2614
+    "no-unused-expression": false,
+    "prefer-const": true,
+    // Prefer T[] to Array<T>, but allow Array<{complex type}>.
+    "array-type": [true, "array-simple"],
+    // Prefer x => y rather than x => { return y; }.
+    "arrow-return-shorthand": [true, "multiline"],
+    "interface-over-type-literal": true,
+    "no-string-throw": true,
+    "object-literal-shorthand": true,
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "never",
+        "asyncArrow": "always",
+        "constructor": "never",
+        "method": "never",
+        "named": "never"
+      }
+    ],
+    "only-arrow-functions": [
+      true,
+      "allow-named-functions"
+    ],
+    "max-line-length": [true, 100],
+    "no-unnecessary-callback-wrapper": true,
+    "radix": true,
+    "no-invalid-template-strings": true
+  },
+  "linterOptions": {
+    "typeCheck": true
+  }
+}

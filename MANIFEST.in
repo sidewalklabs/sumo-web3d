@@ -1,0 +1,3 @@
+recursive-include sumo_web3d *
+recursive-exclude sumo_web3d *.pyc
+

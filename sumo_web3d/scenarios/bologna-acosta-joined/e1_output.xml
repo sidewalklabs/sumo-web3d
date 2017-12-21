@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on Tue Feb 20 20:29:36 2018 by SUMO gui Version v0_31_0+1361-233339ce93
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="/Users/danvk/Downloads/Bologna_small-0.29.0/joined/joined_buslanes.net.xml"/>
+        <route-files value="/Users/danvk/Downloads/Bologna_small-0.29.0/joined/joined.rou.xml,/Users/danvk/Downloads/Bologna_small-0.29.0/joined/joined_busses.rou.xml"/>
+        <additional-files value="/Users/danvk/Downloads/Bologna_small-0.29.0/joined/joined_bus_stops.add.xml,/Users/danvk/Downloads/Bologna_small-0.29.0/joined/joined_detectors.add.xml,/Users/danvk/Downloads/Bologna_small-0.29.0/joined/joined_vtypes.add.xml,/Users/danvk/Downloads/Bologna_small-0.29.0/joined/joined_tls.add.xml"/>
+    </input>
+
+    <output>
+        <tripinfo-output value="/Users/danvk/Downloads/Bologna_small-0.29.0/joined/tripinfos.xml"/>
+        <save-state.prefix value="/Users/danvk/Downloads/Bologna_small-0.29.0/joined/state"/>
+    </output>
+
+    <report>
+        <log value="/Users/danvk/Downloads/Bologna_small-0.29.0/joined/sumo_log.txt"/>
+        <no-step-log value="true"/>
+    </report>
+
+    <emissions>
+        <phemlight-path value="/Users/danvk/Downloads/Bologna_small-0.29.0/joined/./PHEMlight/"/>
+    </emissions>
+
+</configuration>

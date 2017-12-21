@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <input>
+    <net-file value="qq.net.xml"/>
+    <route-files value="qq.passenger.trips.xml,qq.bicycle.trips.xml,qq.pedestrian.rou.xml"/>
+  </input>
+  <processing>
+    <ignore-route-errors value="true"/>
+  </processing>
+  <routing>
+    <device.rerouting.adaptation-steps value="180"/>
+    <no-step-log value="true"/>
+  </routing>
+  <report>
+    <verbose value="true"/>
+    <duration-log.statistics value="true"/>
+  </report>
+</configuration>

@@ -1,0 +1,33 @@
+[
+    {
+        "name": "bologna-acosta",
+        "description": "Canonical SUMO simulation of Bologna, with some buildings added.",
+        "config_file": "scenarios/bologna-acosta/run.sumo.cfg",
+        "is_default": true
+    },
+    {
+        "name": "downtown-toronto",
+        "description": "Large simulation of Queens Quay corridor and the Toronto waterfront, includes buildings.",
+        "config_file": "scenarios/downtown-toronto/toronto.sumocfg"
+    },
+    {
+        "name": "queens-quay",
+        "description": "Queens Quay West and York intersection.",
+        "config_file": "scenarios/queens-quay/queens-quay.sumocfg"
+    },
+    {
+        "name": "cross3ltl",
+        "description": "An interesection with multi-lane roads and traffic lights",
+        "config_file": "scenarios/cross3ltl/test.sumocfg"
+    },
+    {
+        "name": "pedestring striping",
+        "description": "Demonstration of pedestrian congestion in crosswalks",
+        "config_file": "scenarios/pedestrian-striping/test.sumocfg"
+    },
+    {
+        "name": "person_number",
+        "description": "Demonstration of a person gettin on and off the bus",
+        "config_file": "scenarios/person_number/person_number.sumocfg"
+    }
+]

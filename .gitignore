@@ -1,0 +1,15 @@
+*__pycache__*
+output/*
+.vscode
+dist
+
+node_modules
+
+# Generated static files
+*.bundle.js
+*.bundle.js.map
+*.pbf
+*.egg-info
+
+# MacOS
+.DS_Store

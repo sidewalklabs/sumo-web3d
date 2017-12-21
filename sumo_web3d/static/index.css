@@ -1,0 +1,139 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* disable the bounce scroll effect on OSX */
+}
+
+.flex-container {
+  display: flex;
+}
+
+.layout-parent {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+#sidebar {
+  flex: 0 0 20em;
+  min-width: 0;
+  padding: 10px;
+}
+
+#canvas-wrapper {
+  /*
+    Flex items have a default of min-width: auto, which prevents them from shrinking past their content size.
+    See: https://stackoverflow.com/a/36247448/4748336
+    This override ensures that if window size decreases, #canvas-wrapper will shrink to fit within the new window
+    (i.e. it will be less than the width of the contained canvas element)
+    The SUMO canvas will then adjust its dimmensions as a response (see sumo3d.ts)
+  */
+  min-width: 0;
+  flex: 1;
+  position: relative; /* make it an offset parent, for absolutely positioning stats. */
+}
+
+#canvas-wrapper canvas {
+  display: block;
+}
+
+.scenario-row {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.button-row {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.slider-row {
+  display: flex;
+  flex-direction: row;
+}
+
+#slow-symbol {
+  order: -1;
+}
+
+#speed-control-slider {
+  flex: 5;
+}
+
+#fast-symbol {
+  order: 2;
+}
+
+.speed-control-slider-label {
+  margin-top: -40px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.sidebar-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.sidebar-body {
+  overflow: auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.sidebar-footer {
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.quick-focus-title {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.quick-focus-buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.quick-focus-buttons > * {
+  flex: 0 0 33%; /* create 3-column grid */
+}
+
+.clicked-vehicle-info {
+  white-space: pre-wrap;
+  font-family: monospace;
+}
+
+.metadata-section {
+  padding: 10px;
+}
+
+.keyboard-help li {
+  margin-bottom: 4px;
+}
+
+.keyboard-help .key {
+  font-family: monospace;
+  display: inline-block;
+  padding: 2px 4px;
+  border: 1px solid rgba(153, 153, 153, 0.1);
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 4px;
+  background-color: rgba(153, 153, 153, 0.2);
+  font-size: 11px;
+}

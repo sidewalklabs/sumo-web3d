@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewsettings>
+  <scheme name="real world"/>
+  <viewport x="6857.63" y="3027.04" zoom="1000"/>
+  <delay value="20"/>
+
+  <!-- Note: This is a SUMO Explorer-specific extension -->
+  <water-geojson value="lake-ontario.geojson"/>
+</viewsettings>

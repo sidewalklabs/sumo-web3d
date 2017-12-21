@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <input>
+    <net-file value="toronto.net.xml"/>
+    <route-files value="toronto.passenger.trips.xml,toronto.bicycle.trips.xml,toronto.pedestrian.rou.xml"/>
+    <additional-files value="toronto.poly.xml"/>
+  </input>
+  <processing>
+    <ignore-route-errors value="true"/>
+  </processing>
+  <routing>
+    <device.rerouting.adaptation-steps value="180"/>
+    <no-step-log value="true"/>
+  </routing>
+  <report>
+    <verbose value="true"/>
+    <duration-log.statistics value="true"/>
+  </report>
+  <gui_only>
+    <gui-settings-file value="toronto.view.xml"/>
+  </gui_only>
+</configuration>
