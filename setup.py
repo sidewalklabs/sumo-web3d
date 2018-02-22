@@ -23,7 +23,7 @@ setup(
         'sumo_web3d',
         'sumo_web3d.server',
     ],
-    requires=[
+    install_requires=[
         'aiohttp>=2.2',
         'chardet>=3.0',
         'lxml>=3.8',
