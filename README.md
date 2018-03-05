@@ -46,8 +46,6 @@ You can send valid arguments and flags to the SUMO executable.
 * `--step-length 0.1`:
     Each frame should advance by 0.1s, rather than the default of 1s. This results in smoother animation.
 
-![Screenshot of Toronto](screenshots/toronto-wideview.png)
-
 ## Development
 
 SUMO-Web3D is written in Python (Python3) and TypeScript.
@@ -96,7 +94,7 @@ If you'd like to iterate on the frontend code, run:
 
 instead of `yarn webpack` and `python sumo_web3d/sumo_web3d.py`.
 
-![Screenshot of Toronto's Gardiner elevated highway](screenshots/toronto-gardiner.png)
+![Screenshot of an elevated highway with buildings](screenshots/elevated-highway.png)
 
 ### Architecture
 
