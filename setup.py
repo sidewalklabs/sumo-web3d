@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='sumo-web3d',
-    version='1.0.0',
+    version='1.0.1',
     description='Web-based 3D Visualization of SUMO Traffic Simulator',
     long_description='See README.md on GitHub: https://github.com/sidewalklabs/sumo-web3d/',
     author='Sidewalk Labs',
