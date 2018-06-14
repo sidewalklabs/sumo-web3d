@@ -6,7 +6,7 @@ import xmltodict
 
 def parse_xml_file(filepath):
     if filepath:
-        with open(filepath) as f:
+        with open(filepath, encoding='utf-8') as f:
             return xmltodict.parse(f.read(), attr_prefix='')
     else:
         return None
