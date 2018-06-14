@@ -58,7 +58,7 @@
     "prettier-test": "./scripts/prettier.sh --list-different",
     "prettier": "./scripts/prettier.sh --write",
     "run-tests": "mocha --compilers ts:ts-node/register **/*_test.ts",
-    "test": "yarn prettier-test && yarn lint && yarn build && yarn run-tests && yarn webpack && yarn check-yarn",
+    "test": "yarn prettier-test && yarn lint && yarn build && yarn run-tests && yarn webpack",
     "webpack": "webpack"
   },
   "author": "Sidewalk Engineers <sidewalk-eng@sidewalklabs.com>"
