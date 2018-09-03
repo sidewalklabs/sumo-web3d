@@ -98,8 +98,11 @@ instead of `yarn webpack` and `python sumo_web3d/sumo_web3d.py`.
 
 ### Run to visualize Flow
 First do 
+
 `python flow/visualize/visualizer_rllib.py "path-to-pkl-file" "checkpoint num" --run "Algorithm" --num_rollouts "num_rollouts"` 
+
 and then run 
+
 `python sumo_web3d/sumo_web3d.py --sumo-port "port_num" -c 
 "path to sumo.cfg"`
 
