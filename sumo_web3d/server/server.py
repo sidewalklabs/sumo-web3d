@@ -334,7 +334,8 @@ async def websocket_simulation_control(sumo_start_fn, task, websocket, path):
 
 # TraCI business logic
 def start_sumo_executable(gui, sumo_port, sumocfg_file):
-    traci.init(port=int(sumo_port))
+    traci.init(port=int(sumo_port), label="")
+    traci.setOrder(1)
     traci.simulation.subscribe()
 
     # Subscribe to all traffic lights. This set of IDs should never change.
