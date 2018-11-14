@@ -96,18 +96,6 @@ instead of `yarn webpack` and `python sumo_web3d/sumo_web3d.py`.
 
 ![Screenshot of an elevated highway with buildings](screenshots/elevated-highway.png)
 
-### Run to visualize Flow
-First do 
-
-`python flow/visualize/visualizer_rllib.py "path-to-pkl-file" "checkpoint num" --run "Algorithm" --num_rollouts "num_rollouts"` --render --num_clients 2
-
-and then run 
-
-`python sumo_web3d/sumo_web3d.py --sumo-port "port_num" -c 
-"path to sumo.cfg"`
-
-You can get the port num by running "ps aux | grep sumo" and picking the one with num-clients = 2
-
 ### Architecture
 
 There are three main components of the SUMO-Web3D visualization:
