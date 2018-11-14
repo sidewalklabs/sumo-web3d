@@ -339,8 +339,7 @@ async def websocket_simulation_control(sumo_start_fn, task, websocket, path):
 # TraCI business logic
 def start_sumo_executable(gui, sumo_args, sumocfg_file):
     sumoBinary = sumolib.checkBinary('sumo' if not gui else 'sumo-gui')
-    additional_args = shlex.split(sumo_args.sumo_args)\
-        if sumo_args.sumo_args else []
+    additional_args = shlex.split(sumo_args) if sumo_args else []
     args = [sumoBinary, '-c', sumocfg_file] + additional_args
     print('Executing %s' % ' '.join(args))
     traci.start(args)
@@ -359,12 +358,12 @@ def simulate_next_step():
     start_secs = time.time()
     # Vehicles
     traci.simulationStep()
+    end_sim_secs = time.time()
+
     for veh_id in traci.simulation.getDepartedIDList():
         # SUMO will not resubscribe to vehicles that
         # are already subscribed, so this is safe.
         traci.vehicle.subscribe(veh_id, TRACI_VEHICLE_CONSTANTS)
-
-    end_sim_secs = time.time()
 
     # acquire the relevant vehicle information
     ids = tuple(np.unique(traci.vehicle.getIDList() +
