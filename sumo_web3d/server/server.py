@@ -5,6 +5,7 @@ import asyncio
 from collections import Counter
 import functools
 import json
+import numpy as np
 import os
 import re
 import shlex
@@ -356,37 +357,49 @@ def start_sumo_executable(gui, sumo_args, sumocfg_file):
 def simulate_next_step():
     global last_lights, last_vehicles
     start_secs = time.time()
-    traci.simulationStep()
-    end_sim_secs = time.time()
     # Vehicles
+    traci.simulationStep()
     for veh_id in traci.simulation.getDepartedIDList():
         # SUMO will not resubscribe to vehicles that are already subscribed, so this is safe.
         traci.vehicle.subscribe(veh_id, TRACI_VEHICLE_CONSTANTS)
-    vehicle_response = traci.vehicle.getSubscriptionResults().items()
+
+    end_sim_secs = time.time()
+
+    ids = tuple(np.unique(traci.vehicle.getIDList() + \
+          traci.simulation.getSubscriptionResults()[tc.VAR_DEPARTED_VEHICLES_IDS]))
+    vehicle_response = dict((veh_id, traci.vehicle.
+                             getSubscriptionResults(veh_id))
+                           for veh_id in ids)
+    #vehicle_response = traci.vehicle.getSubscriptionResults(traci.vehicle.getIDList()).items()
     # Vehicles are automatically unsubscribed upon arrival and deleted from vehicle list on next
     # timestep. Persons are also automatically unsubscribed.
     # See: http://sumo.dlr.de/wiki/TraCI/Object_Variable_Subscription).
 
     # Workaround for people: traci does not return person objects in the getDepartedIDList() call
     # See: http://sumo.dlr.de/trac.wsgi/ticket/3477
-    for ped_id in traci.person.getIDList():
-        traci.person.subscribe(ped_id, TRACI_PERSON_CONSTANTS)
-    person_response = traci.person.getSubscriptionResults().items()
+    # for ped_id in traci.person.getIDList():
+    #     traci.person.subscribe(ped_id, TRACI_PERSON_CONSTANTS)
+    # person_response = traci.person.getSubscriptionResults().items()
 
-    vehicles = {veh_id: vehicle_to_dict(v) for veh_id, v in vehicle_response}
-    persons = {ped_id: person_to_dict(p) for ped_id, p in person_response}
+    vehicles = {veh_id: vehicle_to_dict(v) for veh_id, v in vehicle_response.items()}
+    # persons = {ped_id: person_to_dict(p) for ped_id, p in person_response}
 
     # Note: we might have to separate vehicles and people if their data models or usage deviate
     # but for now we'll combine them into a single object
-    vehicles.update(persons)
+    # vehicles.update(persons)
     vehicle_counts = Counter(v['vClass'] for veh_id, v in vehicles.items())
     round_vehicles(vehicles)
     vehicles_update = diff_dicts(last_vehicles, vehicles)
 
     # Lights
-    light_response = traci.trafficlights.getSubscriptionResults().items()
-    lights = {light_id: light_to_dict(light) for light_id, light in light_response}
-    lights_update = diff_dicts(last_lights, lights)
+    if traci.trafficlight.getIDList():
+        # FIXME this is not supported in SUMO 1.0.1
+        light_response = traci.trafficlights.getSubscriptionResults().items()
+        lights = {light_id: light_to_dict(light) for light_id, light in light_response}
+        lights_update = diff_dicts(last_lights, lights)
+    else:
+        lights = {}
+        lights_update = diff_dicts({}, {})
 
     end_update_secs = time.time()
 
