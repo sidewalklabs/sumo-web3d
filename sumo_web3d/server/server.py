@@ -369,9 +369,8 @@ def simulate_next_step():
     ids = tuple(np.unique(traci.vehicle.getIDList() +
                           traci.simulation.getSubscriptionResults()
                           [tc.VAR_DEPARTED_VEHICLES_IDS]))
-    veh_info = lambda v_id: \
-        vehicle_to_dict(traci.vehicle.getSubscriptionResults(v_id))
-    vehicles = {veh_id: veh_info(veh_id)
+
+    vehicles = {veh_id: vehicle_to_dict(traci.vehicle.getSubscriptionResults(veh_id))
                 for veh_id in ids}
     # Vehicles are automatically unsubscribed upon arrival
     # and deleted from vehicle list on next
@@ -384,9 +383,9 @@ def simulate_next_step():
     for ped_id in traci.person.getIDList():
         traci.person.subscribe(ped_id, TRACI_PERSON_CONSTANTS)
     p_ids = traci.person.getIDList()
-    person_info = lambda p_id: \
-        person_to_dict(traci.person.getSubscriptionResults(p_id))
-    persons = {p_id: person_info(p_id) for p_id in p_ids}
+
+    persons = {p_id: person_to_dict(traci.person.getSubscriptionResults(p_id))
+               for p_id in p_ids}
 
     # Note: we might have to separate vehicles and people
     # if their data models or usage deviate
@@ -398,9 +397,8 @@ def simulate_next_step():
 
     # Lights
     l_ids = traci.trafficlight.getIDList()
-    light_info = lambda l_id: \
-        light_to_dict(traci.trafficlight.getSubscriptionResults(l_id))
-    lights = {l_id: light_info(l_id) for l_id in l_ids}
+    lights = {l_id: light_to_dict(traci.trafficlight.getSubscriptionResults(l_id))
+              for l_id in l_ids}
     lights_update = diff_dicts(last_lights, lights)
 
     end_update_secs = time.time()
