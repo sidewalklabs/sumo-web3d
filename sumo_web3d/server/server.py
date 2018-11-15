@@ -5,7 +5,6 @@ import asyncio
 from collections import Counter
 import functools
 import json
-import numpy as np
 import os
 import re
 import shlex
@@ -263,8 +262,7 @@ def make_xml_endpoint(path):
 def make_additional_endpoint(paths):
     """Make an endpoint for the "additional-files" setting.
 
-    Since there can be several of these, we read them
-     all and merge the results.
+    Since there can be several of these, we read them all and merge the results.
     """
     if not paths:  # Either None or empty list
         return make_xml_endpoint(paths)  # generate a generic 404.
@@ -329,8 +327,7 @@ async def websocket_simulation_control(sumo_start_fn, task, websocket, path):
                 await websocket.send(json.dumps(get_state_websocket_message()))
             else:
                 raise Exception('unrecognized websocket message')
-        # we need to handle implicit cancelling, ie the
-        #  client closing their browser
+        # we need to handle implicit cancelling, ie the client closing their browser
         except websockets.exceptions.ConnectionClosed:
             cleanup_sumo_simulation(task)
             break
@@ -356,20 +353,17 @@ def start_sumo_executable(gui, sumo_args, sumocfg_file):
 def simulate_next_step():
     global last_lights, last_vehicles
     start_secs = time.time()
-    # Vehicles
     traci.simulationStep()
     end_sim_secs = time.time()
-
+    # Update Vehicles
     for veh_id in traci.simulation.getDepartedIDList():
-        # SUMO will not resubscribe to vehicles that
-        # are already subscribed, so this is safe.
+        # SUMO will not resubscribe to vehicles that are already subscribed, so this is safe.
         traci.vehicle.subscribe(veh_id, TRACI_VEHICLE_CONSTANTS)
 
     # acquire the relevant vehicle information
-    ids = tuple(np.unique(traci.vehicle.getIDList() +
+    ids = tuple(set(traci.vehicle.getIDList() +
                           traci.simulation.getSubscriptionResults()
                           [tc.VAR_DEPARTED_VEHICLES_IDS]))
-
     vehicles = {veh_id: vehicle_to_dict(traci.vehicle.getSubscriptionResults(veh_id))
                 for veh_id in ids}
     # Vehicles are automatically unsubscribed upon arrival
@@ -377,28 +371,27 @@ def simulate_next_step():
     # timestep. Persons are also automatically unsubscribed.
     # See: http://sumo.dlr.de/wiki/TraCI/Object_Variable_Subscription).
 
-    # Workaround for people: traci does not return person
-    # objects in the getDepartedIDList() call
+    # Update persons
+    # Workaround for people: traci does not return person objects in the getDepartedIDList() call
     # See: http://sumo.dlr.de/trac.wsgi/ticket/3477
     for ped_id in traci.person.getIDList():
         traci.person.subscribe(ped_id, TRACI_PERSON_CONSTANTS)
-    p_ids = traci.person.getIDList()
+    person_ids = traci.person.getIDList()
 
     persons = {p_id: person_to_dict(traci.person.getSubscriptionResults(p_id))
-               for p_id in p_ids}
+               for p_id in person_ids}
 
-    # Note: we might have to separate vehicles and people
-    # if their data models or usage deviate
+    # Note: we might have to separate vehicles and people if their data models or usage deviate
     # but for now we'll combine them into a single object
     vehicles.update(persons)
     vehicle_counts = Counter(v['vClass'] for veh_id, v in vehicles.items())
     round_vehicles(vehicles)
     vehicles_update = diff_dicts(last_vehicles, vehicles)
 
-    # Lights
-    l_ids = traci.trafficlight.getIDList()
+    # Update lights
+    light_ids = traci.trafficlight.getIDList()
     lights = {l_id: light_to_dict(traci.trafficlight.getSubscriptionResults(l_id))
-              for l_id in l_ids}
+              for l_id in light_ids}
     lights_update = diff_dicts(last_lights, lights)
 
     end_update_secs = time.time()
@@ -439,8 +432,7 @@ def parse_config_file(config_dir, config):
 
     settings_file = None
     if 'gui_only' in config and 'gui-settings-file' in config['gui_only']:
-        config_val = config['gui_only']['gui-settings-file']['value']
-        settings_file = os.path.join(config_dir, config_val)
+        settings_file = os.path.join(config_dir, config['gui_only']['gui-settings-file']['value'])
     return (net_file, additional_files, settings_file)
 
 
@@ -457,8 +449,7 @@ def get_scenarios_route(scenarios_file, scenarios):
 
 @send_as_http_response
 @serialize_as_json_string
-def scenario_attribute_route(scenarios_file, scenarios,
-                             attribute, normalized_key, request):
+def scenario_attribute_route(scenarios_file, scenarios, attribute, normalized_key, request):
     requested_scenario = request.match_info['scenario']
     if requested_scenario not in scenarios:
         scenarios = load_scenarios_file(scenarios, scenarios_file)
@@ -487,8 +478,7 @@ def load_scenarios_file(prev_scenarios, scenarios_file):
                 'same kebab case name'
             )
         prev_scenario_names = set([s.name for s in prev_scenarios.values()])
-        updates = [s for s in new_scenarios if to_kebab_case(s['name'])
-                   not in prev_scenario_names]
+        updates = [s for s in new_scenarios if to_kebab_case(s['name']) not in prev_scenario_names]
         for new_scenario in updates:
             scenario = Scenario.from_config_json(new_scenario)
             next_scenarios.update({scenario.name: scenario})
@@ -504,8 +494,7 @@ def get_new_scenario(request):
     current_scenario = scenarios[scenario_name]
     # We avoid web.FileResponse here because we want to disable caching.
     html = open(os.path.join(DIR, 'static', 'index.html')).read()
-    return web.Response(text=html, content_type='text/html',
-                        headers=NO_CACHE_HEADER)
+    return web.Response(text=html, content_type='text/html', headers=NO_CACHE_HEADER)
 
 
 def get_default_scenario_name(scenarios):
@@ -521,30 +510,25 @@ def get_default_scenario_name(scenarios):
 def setup_http_server(task, scenario_file, scenarios):
     app = web.Application()
 
-    scenarios_response = [scenario_to_response_body(x)
-                          for x in scenarios.values()]
+    scenarios_response = [scenario_to_response_body(x) for x in scenarios.values()]
     default_scenario_name = get_default_scenario_name(scenarios)
 
     app.router.add_get(
         '/scenarios/{scenario}/additional',
-        functools.partial(scenario_attribute_route, scenario_file,
-                          scenarios, 'additional', None)
+        functools.partial(scenario_attribute_route, scenario_file, scenarios, 'additional', None)
     )
     app.router.add_get(
         '/scenarios/{scenario}/network',
-        functools.partial(scenario_attribute_route, scenario_file,
-                          scenarios, 'network', None)
+        functools.partial(scenario_attribute_route, scenario_file, scenarios, 'network', None)
     )
     app.router.add_get(
         '/scenarios/{scenario}/water',
-        functools.partial(scenario_attribute_route, scenario_file,
-                          scenarios, 'water', None)
+        functools.partial(scenario_attribute_route, scenario_file, scenarios, 'water', None)
     )
     app.router.add_get(
         '/scenarios/{scenario}/settings',
         functools.partial(
-            scenario_attribute_route, scenario_file, scenarios,
-            'settings', 'viewsettings')
+            scenario_attribute_route, scenario_file, scenarios, 'settings', 'viewsettings')
     )
     app.router.add_get('/scenarios/{scenario}/', get_new_scenario)
 
@@ -554,8 +538,7 @@ def setup_http_server(task, scenario_file, scenarios):
     )
     app.router.add_get(
         '/poly-convert',
-        make_xml_endpoint(os.path.join(constants.SUMO_HOME,
-                                       'data/typemap/osmPolyconvert.typ.xml'))
+        make_xml_endpoint(os.path.join(constants.SUMO_HOME, 'data/typemap/osmPolyconvert.typ.xml'))
     )
     app.router.add_get('/state', state_http_response)
     app.router.add_post('/state', functools.partial(post_state, scenarios))
@@ -570,13 +553,11 @@ def setup_http_server(task, scenario_file, scenarios):
 def main(args):
     global current_scenario, scenarios, SCENARIOS_PATH
     task = None
-    sumo_start_fn = functools.partial(start_sumo_executable, args.gui,
-                                      args.sumo_args)
+    sumo_start_fn = functools.partial(start_sumo_executable, args.gui, args.sumo_args)
 
     if args.configuration_file:
         # Replace the built-in scenarios with a single, user-specified one.
-        # We don't merge the lists to avoid clashes with
-        #  two scenarios having is_default set.
+        # We don't merge the lists to avoid clashes with two scenarios having is_default set.
         SCENARIOS_PATH = None
         name = os.path.basename(args.configuration_file)
         scenarios = {
