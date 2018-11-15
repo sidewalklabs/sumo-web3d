@@ -14,7 +14,7 @@ from aiohttp import web
 import websockets
 import xmltodict
 
-from . import constants # noqa
+from . import constants  # noqa
 from .deltas import round_vehicles, diff_dicts
 import sumolib
 import traci
@@ -72,7 +72,6 @@ delay_length_ms = 30  # in ms
 current_scenario = None
 scenarios = {}  # map from kebab-case-name to Scenario object.
 
-
 last_vehicles = {}
 last_lights = {}
 
@@ -89,6 +88,7 @@ def send_as_http_response(func):
             )
         else:
             return web.Response(status=404, text='Not found')
+
     return func_wrapper
 
 
@@ -100,6 +100,7 @@ def serialize_as_json_string(func):
             return json.dumps(data)
         else:
             return None
+
     return func_wrapper
 
 
@@ -254,6 +255,7 @@ def make_xml_endpoint(path):
             return web.Response(text=text)
         else:
             return web.Response(status=404, text='Not found')
+
     return handler
 
 
@@ -272,6 +274,7 @@ def make_additional_endpoint(paths):
 
     async def handler(request):
         return web.Response(text=text)
+
     return handler
 
 
@@ -352,23 +355,31 @@ def simulate_next_step():
     start_secs = time.time()
     traci.simulationStep()
     end_sim_secs = time.time()
-    # Vehicles
+    # Update Vehicles
     for veh_id in traci.simulation.getDepartedIDList():
         # SUMO will not resubscribe to vehicles that are already subscribed, so this is safe.
         traci.vehicle.subscribe(veh_id, TRACI_VEHICLE_CONSTANTS)
-    vehicle_response = traci.vehicle.getSubscriptionResults().items()
-    # Vehicles are automatically unsubscribed upon arrival and deleted from vehicle list on next
+
+    # acquire the relevant vehicle information
+    ids = tuple(set(traci.vehicle.getIDList() +
+                    traci.simulation.getSubscriptionResults()
+                    [tc.VAR_DEPARTED_VEHICLES_IDS]))
+    vehicles = {veh_id: vehicle_to_dict(traci.vehicle.getSubscriptionResults(veh_id))
+                for veh_id in ids}
+    # Vehicles are automatically unsubscribed upon arrival
+    # and deleted from vehicle list on next
     # timestep. Persons are also automatically unsubscribed.
     # See: http://sumo.dlr.de/wiki/TraCI/Object_Variable_Subscription).
 
+    # Update persons
     # Workaround for people: traci does not return person objects in the getDepartedIDList() call
     # See: http://sumo.dlr.de/trac.wsgi/ticket/3477
     for ped_id in traci.person.getIDList():
         traci.person.subscribe(ped_id, TRACI_PERSON_CONSTANTS)
-    person_response = traci.person.getSubscriptionResults().items()
+    person_ids = traci.person.getIDList()
 
-    vehicles = {veh_id: vehicle_to_dict(v) for veh_id, v in vehicle_response}
-    persons = {ped_id: person_to_dict(p) for ped_id, p in person_response}
+    persons = {p_id: person_to_dict(traci.person.getSubscriptionResults(p_id))
+               for p_id in person_ids}
 
     # Note: we might have to separate vehicles and people if their data models or usage deviate
     # but for now we'll combine them into a single object
@@ -377,9 +388,10 @@ def simulate_next_step():
     round_vehicles(vehicles)
     vehicles_update = diff_dicts(last_vehicles, vehicles)
 
-    # Lights
-    light_response = traci.trafficlights.getSubscriptionResults().items()
-    lights = {light_id: light_to_dict(light) for light_id, light in light_response}
+    # Update lights
+    light_ids = traci.trafficlight.getIDList()
+    lights = {l_id: light_to_dict(traci.trafficlight.getSubscriptionResults(l_id))
+              for l_id in light_ids}
     lights_update = diff_dicts(last_lights, lights)
 
     end_update_secs = time.time()
