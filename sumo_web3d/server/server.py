@@ -362,8 +362,8 @@ def simulate_next_step():
 
     # acquire the relevant vehicle information
     ids = tuple(set(traci.vehicle.getIDList() +
-                          traci.simulation.getSubscriptionResults()
-                          [tc.VAR_DEPARTED_VEHICLES_IDS]))
+                    traci.simulation.getSubscriptionResults()
+                    [tc.VAR_DEPARTED_VEHICLES_IDS]))
     vehicles = {veh_id: vehicle_to_dict(traci.vehicle.getSubscriptionResults(veh_id))
                 for veh_id in ids}
     # Vehicles are automatically unsubscribed upon arrival
