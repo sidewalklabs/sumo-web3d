@@ -169,9 +169,10 @@ def person_to_dict(person):
     }
 
 
-def vehicle_to_dict(vehicle):
+def vehicle_to_dict(veh_id, vehicle):
     """Extracts relevant information from what traci.vehicle.getSubscriptionResults."""
-    return {
+
+    dict = {
         'x': vehicle[tc.VAR_POSITION3D][0],
         'y': vehicle[tc.VAR_POSITION3D][1],
         'z': vehicle[tc.VAR_POSITION3D][2],
@@ -183,6 +184,10 @@ def vehicle_to_dict(vehicle):
         'signals': vehicle[tc.VAR_SIGNALS],
         'vClass': vehicle.get(tc.VAR_VEHICLECLASS),
     }
+    if 'human' not in veh_id:
+        dict['vClass'] = 'av'
+
+    return dict
 
 
 def light_to_dict(light):
@@ -377,7 +382,7 @@ def simulate_next_step():
                           traci.simulation.getSubscriptionResults()
                           [tc.VAR_DEPARTED_VEHICLES_IDS]))
     veh_info = lambda v_id: \
-        vehicle_to_dict(traci.vehicle.getSubscriptionResults(v_id))
+        vehicle_to_dict(v_id, traci.vehicle.getSubscriptionResults(v_id))
     vehicles = {veh_id: veh_info(veh_id)
                 for veh_id in ids}
     # Vehicles are automatically unsubscribed upon arrival
