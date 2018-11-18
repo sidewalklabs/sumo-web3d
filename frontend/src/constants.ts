@@ -9,7 +9,8 @@ import {Object3DLoaderParam, SupportedVehicle} from './api';
 // Vehicle colors and types from OpenGameArt (OGA), licensed CC0.
 // See http://opengameart.org/content/vehicles-assets-pt1
 // There are also types for trucks and vans which we could incorporate.
-const OGA_COLORS = ['blue', 'citrus', 'green', 'orange', 'red', 'silver', 'violet'];
+//const OGA_COLORS = ['blue', 'citrus', 'green', 'orange', 'red', 'silver', 'violet'];
+const OGA_COLORS = ['blue', 'red', 'silver'];
 const OGA_TYPES = ['normal', 'hatchback', 'mpv', 'station'];
 // The OGA vehicles are scaled to [-1, 1]. This winds up being a bit small, so we scale up.
 const OGA_SCALE = 2.2;
