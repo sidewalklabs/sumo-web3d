@@ -378,7 +378,7 @@ def simulate_next_step():
         traci.person.subscribe(ped_id, TRACI_PERSON_CONSTANTS)
     person_response = traci.person.getSubscriptionResults().items()
 
-    vehicles = {veh_id: vehicle_to_dict(v) for veh_id, v in vehicle_response}
+    vehicles = {veh_id: vehicle_to_dict(veh_id, v) for veh_id, v in vehicle_response}
     persons = {ped_id: person_to_dict(p) for ped_id, p in person_response}
 
     # Note: we might have to separate vehicles and people if their data models or usage deviate
