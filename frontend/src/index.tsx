@@ -7,7 +7,6 @@ import init from './initialization';
 
 (async () => {
   const initResources = await init();
-
   const store = createStore(initResources);
   const render = () => {
     ReactDOM.render(

@@ -17,7 +17,7 @@ export interface SidebarState {
   sliderLocation: number; // between 0 and 1
 }
 
-export const MAX_DELAY_MS = 100;
+export const MAX_DELAY_MS = 500;
 
 const UnfollowButton = (props: {unfollowObjectPOV: () => any}) => (
   <FlatButton label="Unfollow" secondary={true} onClick={props.unfollowObjectPOV} />

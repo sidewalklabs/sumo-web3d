@@ -9,7 +9,8 @@ import {Object3DLoaderParam, SupportedVehicle} from './api';
 // Vehicle colors and types from OpenGameArt (OGA), licensed CC0.
 // See http://opengameart.org/content/vehicles-assets-pt1
 // There are also types for trucks and vans which we could incorporate.
-const OGA_COLORS = ['blue', 'citrus', 'green', 'orange', 'red', 'silver', 'violet'];
+//const OGA_COLORS = ['blue', 'citrus', 'green', 'orange', 'red', 'silver', 'violet'];
+//const OGA_COLORS = ['blue', 'red', 'silver'];
 const OGA_TYPES = ['normal', 'hatchback', 'mpv', 'station'];
 // The OGA vehicles are scaled to [-1, 1]. This winds up being a bit small, so we scale up.
 const OGA_SCALE = 2.2;
@@ -25,7 +26,23 @@ function ogaVehicle(type: string, color: string): Object3DLoaderParam {
 export const SUPPORTED_VEHICLE_CLASSES: {[sumoVehicleClass: string]: SupportedVehicle} = {
   passenger: {
     label: 'car',
-    models: _.flatMap(OGA_TYPES, type => _.map(OGA_COLORS, color => ogaVehicle(type, color))),
+    models: [
+      {
+    objectUrl: `/vehicles/car-normal-green.obj`,
+    materialUrl: `/vehicles/car-normal-green.mtl`,
+    scale: OGA_SCALE,
+      },
+    ],
+  },
+  av: {
+    label: 'av',
+    models: [
+      {
+    objectUrl: `/vehicles/car-normal-red.obj`,
+    materialUrl: `/vehicles/car-normal-red.mtl`,
+    scale: OGA_SCALE,
+      },
+    ],
   },
   bicycle: {
     label: 'bike',
