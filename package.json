@@ -25,7 +25,7 @@
     "dat.gui": "^0.6.1",
     "extrude-polyline": "^1.0.6",
     "imports-loader": "^0.7.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "material-ui": "^0.19.1",
     "polyline": "^0.2.0",
     "proj4": "^2.4.4",
