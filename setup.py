@@ -15,9 +15,9 @@ setup(
     },
     include_package_data=True,
     package_data={
-        'static': 'sumo_web3d/static/*',
-        'scenarios': 'sumo_web3d/scenarios/*',
-        'scenarios.json': 'sumo_web3d/scenarios.json'
+        'static': ['sumo_web3d/static/*'],
+        'scenarios': ['sumo_web3d/scenarios/*'],
+        'scenarios.json': ['sumo_web3d/scenarios.json']
     },
     packages=[
         'sumo_web3d',
